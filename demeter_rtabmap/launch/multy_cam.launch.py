@@ -121,6 +121,24 @@ def generate_launch_description():
         ]
     )
 
+    imu_filter = Node(
+        package='imu_filter_madgwick',
+        executable='imu_filter_madgwick_node',
+        name='imu_filter',
+        output='screen',
+        parameters=[{
+            'use_sim_time': use_sim_time,
+            'use_mag': False,       # без магнетометра
+            'publish_tf': False,    # TF публикует rtabmap, не фильтр
+            'world_frame': 'enu',
+            'frequency': 500.0,
+        }],
+        remappings=[
+            ('imu/data_raw', 'imu/data'),        # ваш сырой топик
+            ('imu/data',     'imu/data_filtered'),
+        ]
+    )
+
     rtabmap_bringup = GroupAction(
         actions=[
             Node(
@@ -137,13 +155,14 @@ def generate_launch_description():
                     'subscribe_odom': False,
                     #'odom_topic': '/diff_drive_controller/odom',  # ПРАВИЛЬНЫЙ ТОПИК!
                     'approx_sync': False,
-                    'subscribe_odom_info': False,
+                    'subscribe_odom_info': True,
                     'queue_size': 100,
                     'sync_queue_size': 100,
                     'Mem/IncrementalMemory': 'true',
                     'RGBD/ProximityBySpace': 'true',
                     'RGBD/AngularUpdate': '0.01',
                     'RGBD/LinearUpdate': '0.01',
+                    'Rtabmap/DetectionRate': '30',
                     'Grid/FromDepth': 'true',
                 }],
                 remappings=[
@@ -151,8 +170,8 @@ def generate_launch_description():
                     ("rgbd_image1", 'left_cams/rgbd_image'),
                     ("rgbd_image2", 'right_cams/rgbd_image'),
                     ('odom', 'diff_drive_controller/odom'),
-                    ('gps/fix', 'navsat/fix'),
-                    ('imu', 'imu/data'),
+                    # ('gps/fix', 'navsat/fix'),
+                    ('imu',         'imu/data_filtered'),   # фильтрованный IMU!
                 ],
                 arguments=['-d'],  # Удалить старую БД
                 condition=UnlessCondition(localization)
@@ -168,12 +187,14 @@ def generate_launch_description():
                     'subscribe_rgbd': True,
                     'rgbd_cameras': 3,
                     'approx_sync': False,
+                    # 'wait_imu_to_init': True,    # ждать IMU перед стартом
+                    # 'Imu/FilteringStrategy': '1',
                 }],
                 remappings=[
                     ("rgbd_image0", 'front_cams/rgbd_image'),
                     ("rgbd_image1", 'left_cams/rgbd_image'),
                     ("rgbd_image2", 'right_cams/rgbd_image'),
-                    ('imu', 'imu/data'),
+                    ('imu',         'imu/data_filtered'),   # фильтрованный IMU!
                 ],
                 condition=UnlessCondition(localization)
             ),
@@ -210,6 +231,6 @@ def generate_launch_description():
         rtabmap_viz_arg,
 
         stereo_to_rgbd,
-        # stereo_to_rgbd_image_proc,
+        imu_filter,
         rtabmap_bringup,
     ])
