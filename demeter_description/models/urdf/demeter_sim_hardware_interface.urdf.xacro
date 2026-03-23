@@ -1,0 +1,296 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+  
+  <!-- Simulation hardware interface -->
+  <ros2_control name="GazeboSimSystem" type="system">
+    <hardware>
+      <plugin>gz_ros2_control/GazeboSimSystem</plugin>
+    </hardware>
+    <joint name="Left_motor_pered">
+      <command_interface name="velocity">
+        <param name="min">-10</param>
+        <param name="max">10</param>
+      </command_interface>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="Right_motor_pered">
+      <command_interface name="velocity">
+        <param name="min">-10</param>
+        <param name="max">10</param>
+      </command_interface>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+
+    <joint name="Right_motor_zad">
+      <command_interface name="velocity">
+        <param name="min">-10</param>
+        <param name="max">10</param>
+      </command_interface>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="Caretca_prav_zad_1">
+      <command_interface name="velocity">
+        <param name="min">-10</param>
+        <param name="max">10</param>
+      </command_interface>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="Caretca_prav_zad_2">
+      <command_interface name="velocity">
+        <param name="min">-10</param>
+        <param name="max">10</param>
+      </command_interface>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="Caretca_prav_pered_1">
+      <command_interface name="velocity">
+        <param name="min">-10</param>
+        <param name="max">10</param>
+      </command_interface>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="Caretca_prav_pered_2">
+      <command_interface name="velocity">
+        <param name="min">-10</param>
+        <param name="max">10</param>
+      </command_interface>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+
+    <joint name="Left_motor_zad">
+      <command_interface name="velocity">
+        <param name="min">-10</param>
+        <param name="max">10</param>
+      </command_interface>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="Caretca_left_zad_1">
+      <command_interface name="velocity">
+        <param name="min">-10</param>
+        <param name="max">10</param>
+      </command_interface>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="Caretca_left_zad_2">
+      <command_interface name="velocity">
+        <param name="min">-10</param>
+        <param name="max">10</param>
+      </command_interface>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="Caretca_left_pered_1">
+      <command_interface name="velocity">
+        <param name="min">-10</param>
+        <param name="max">10</param>
+      </command_interface>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="Caretca_left_pered_2">
+      <command_interface name="velocity">
+        <param name="min">-10</param>
+        <param name="max">10</param>
+      </command_interface>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+
+  </ros2_control>
+
+  <gazebo>
+
+    <!-- ros2_control -->
+    <plugin filename="gz_ros2_control-system" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
+      <parameters>$(find demeter_control)/config/controller_params.yaml</parameters>
+      <ros>
+        <namespace>$(arg namespace)</namespace>
+        <remapping>/tf:=tf</remapping>
+      </ros>
+    </plugin>
+
+    <!-- navsat -->
+    <plugin filename="ignition-gazebo-navsat-system" name="ignition::gazebo::systems::NavSat"/>
+
+    <!-- IMU -->
+    <plugin filename="libignition-gazebo-imu-system.so" name="ignition::gazebo::systems::Imu"/>
+
+  </gazebo>
+
+  
+  <!-- Sensor simulation -->
+
+  <!-- for RTAB-MAP -->
+  <!-- Stereo Front Cameras -->
+  <gazebo reference="front_cams">
+    <sensor name='f_left_camera' type='camera'>
+      <pose>0 0.0375 0 0 0 0</pose>
+      <camera>
+        <horizontal_fov>1.047</horizontal_fov> <!-- ~60 deg -->
+        <image>
+          <width>640</width>
+          <height>480</height>
+          <format>R8G8B8</format>
+        </image>
+        <clip>
+          <near>0.1</near>
+          <far>100.0</far>
+        </clip>
+      </camera>
+      <always_on>1</always_on>
+      <update_rate>30</update_rate>
+      <visualize>1</visualize>
+      <topic>$(arg namespace)/front_cams/f_left_camera/image</topic>
+      <ignition_frame_id>$(arg frame_prefix)f_left_camera</ignition_frame_id>
+    </sensor>
+    <sensor name='f_right_camera' type='camera'>
+      <pose>0 -0.0375 0 0 0 0</pose>
+      <camera>
+        <horizontal_fov>1.047</horizontal_fov>
+        <image>
+          <width>640</width>
+          <height>480</height>
+          <format>R8G8B8</format>
+        </image>
+        <clip>
+          <near>0.1</near>
+          <far>100.0</far>
+        </clip>
+      </camera>
+      <always_on>1</always_on>
+      <update_rate>30</update_rate>
+      <visualize>1</visualize>
+      <topic>$(arg namespace)/front_cams/f_right_camera/image</topic>
+      <ignition_frame_id>$(arg frame_prefix)f_right_camera</ignition_frame_id>
+    </sensor>
+  </gazebo>
+  <gazebo reference="base_to_front_cams">
+    <preserveFixedJoint>true</preserveFixedJoint>
+  </gazebo>
+
+  <!-- Stereo Left Camera -->
+  <gazebo reference="left_cams">
+    <sensor name='l_left_camera' type='camera'>
+      <pose>0 0.0375 0 0 0 0</pose>
+      <camera>
+        <horizontal_fov>1.047</horizontal_fov>
+        <image>
+          <width>640</width>
+          <height>480</height>
+          <format>R8G8B8</format>
+        </image>
+        <clip>
+          <near>0.1</near>
+          <far>100.0</far>
+        </clip>
+      </camera>
+      <always_on>1</always_on>
+      <update_rate>30</update_rate>
+      <visualize>0</visualize>
+      <topic>$(arg namespace)/left_cams/l_left_camera/image</topic>
+      <ignition_frame_id>$(arg frame_prefix)l_left_camera</ignition_frame_id>
+    </sensor>
+    <sensor name='l_right_camera' type='camera'>
+      <pose>0 -0.0375 0 0 0 0</pose>
+      <camera>
+        <horizontal_fov>1.047</horizontal_fov>
+        <image>
+          <width>640</width>
+          <height>480</height>
+          <format>R8G8B8</format>
+        </image>
+        <clip>
+          <near>0.1</near>
+          <far>100.0</far>
+        </clip>
+      </camera>
+      <always_on>1</always_on>
+      <update_rate>30</update_rate>
+      <visualize>0</visualize>
+      <topic>$(arg namespace)/left_cams/l_right_camera/image</topic>
+      <ignition_frame_id>$(arg frame_prefix)l_right_camera</ignition_frame_id>
+    </sensor>
+  </gazebo>
+  <gazebo reference="base_to_left_cams">
+    <preserveFixedJoint>true</preserveFixedJoint>
+  </gazebo>
+
+  <!-- Stereo Right Camera -->
+  <gazebo reference="right_cams">
+    <sensor name='r_left_camera' type='camera'>
+      <pose>0 0.0375 0 0 0 0</pose>
+      <camera>
+        <horizontal_fov>1.047</horizontal_fov>
+        <image>
+          <width>640</width>
+          <height>480</height>
+          <format>R8G8B8</format>
+        </image>
+        <clip>
+          <near>0.1</near>
+          <far>100.0</far>
+        </clip>
+      </camera>
+      <always_on>1</always_on>
+      <update_rate>30</update_rate>
+      <visualize>0</visualize>
+      <topic>$(arg namespace)/right_cams/r_left_camera/image</topic>
+      <ignition_frame_id>$(arg frame_prefix)r_left_camera</ignition_frame_id>
+    </sensor>
+    <sensor name='r_right_camera' type='camera'>
+      <pose>0 -0.0375 0 0 0 0</pose>
+      <camera>
+        <horizontal_fov>1.047</horizontal_fov>
+        <image>
+          <width>640</width>
+          <height>480</height>
+          <format>R8G8B8</format>
+        </image>
+        <clip>
+          <near>0.1</near>
+          <far>100.0</far>
+        </clip>
+      </camera>
+      <always_on>1</always_on>
+      <update_rate>30</update_rate>
+      <visualize>0</visualize>
+      <topic>$(arg namespace)/right_cams/r_right_camera/image</topic>
+      <ignition_frame_id>$(arg frame_prefix)r_right_camera</ignition_frame_id>
+    </sensor>
+  </gazebo>
+  <gazebo reference="base_to_right_cams">
+    <preserveFixedJoint>true</preserveFixedJoint>
+  </gazebo>
+
+  <!-- for GNSS -->
+  <gazebo reference="navsat_link">
+    <sensor name="navsat" type="navsat">
+      <pose>0 0 0 0 -0 0</pose>
+      <always_on>1</always_on>
+      <update_rate>1</update_rate>
+      <topic>$(arg namespace)/navsat/fix</topic>
+      <ignition_frame_id>$(arg frame_prefix)navsat_link</ignition_frame_id>
+    </sensor>
+  </gazebo>
+
+  <gazebo reference="imu_link">
+    <sensor name="imu" type="imu">
+      <pose>0 0 0.0 0 -0 0</pose>
+      <always_on>1</always_on>
+      <update_rate>1</update_rate> <!-- To simulate orientation coming from dual GNSS -->
+      <visualize>false</visualize>
+      <topic>$(arg namespace)/imu/data</topic>
+      <ignition_frame_id>$(arg frame_prefix)imu_link</ignition_frame_id>
+    </sensor>
+  </gazebo>
+
+</robot>

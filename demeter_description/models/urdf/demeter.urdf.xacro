@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+
+<robot name="demeter" xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <!-- Arguments -->
+  <xacro:arg name="sim" default="true" />
+  <xacro:arg name="robot_name" default="demeter" />
+  <xacro:arg name="namespace" default="" />  
+  <xacro:arg name="frame_prefix" default="" />
+ 
+  <!-- Robot model -->
+  <xacro:include filename="$(find demeter_description)/models/urdf/demeter_model.urdf.xacro" />
+
+  <!-- Simulation hardware interface -->
+  <xacro:if value="$(arg sim)">
+    <xacro:include filename="$(find demeter_description)/models/urdf/demeter_sim_hardware_interface.urdf.xacro" />
+  </xacro:if>
+
+</robot>
