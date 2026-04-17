@@ -6,9 +6,6 @@ from launch.conditions import IfCondition, UnlessCondition
 from ament_index_python.packages import get_package_share_directory
 
 
-# Чтобы избавиться от ошибки с бэйзлайном надо сделть через stereo_proc_image и так добывать pointcloud
-# https://github.com/introlab/rtabmap_ros/blob/ros2/rtabmap_examples/launch/rtabmap_D405x2.launch.py
-
 def generate_launch_description():
     # --- Arguments ---
     robot_name_arg = DeclareLaunchArgument(
@@ -152,24 +149,25 @@ def generate_launch_description():
                     'odom_frame_id': 'odom',  # Фрейм одометрии
                     'map_frame_id': 'map',
                     'subscribe_rgbd': True,
-                    'subscribe_odom': False,
+                    'subscribe_odom': True,
                     #'odom_topic': '/diff_drive_controller/odom',  # ПРАВИЛЬНЫЙ ТОПИК!
                     'approx_sync': False,
-                    'subscribe_odom_info': True,
+                    'subscribe_odom_info': False,
                     'queue_size': 100,
                     'sync_queue_size': 100,
                     'Mem/IncrementalMemory': 'true',
                     'RGBD/ProximityBySpace': 'true',
                     'RGBD/AngularUpdate': '0.01',
                     'RGBD/LinearUpdate': '0.01',
-                    'Rtabmap/DetectionRate': '30',
+                    # 'Rtabmap/DetectionRate': '30',
                     'Grid/FromDepth': 'true',
                 }],
                 remappings=[
                     ("rgbd_image0", 'front_cams/rgbd_image'),
                     ("rgbd_image1", 'left_cams/rgbd_image'),
                     ("rgbd_image2", 'right_cams/rgbd_image'),
-                    ('odom', 'diff_drive_controller/odom'),
+                    ('odom', 'odom'),
+                    # ('odom', 'diff_drive_controller/odom'),
                     # ('gps/fix', 'navsat/fix'),
                     ('imu',         'imu/data_filtered'),   # фильтрованный IMU!
                 ],
@@ -187,7 +185,13 @@ def generate_launch_description():
                     'subscribe_rgbd': True,
                     'rgbd_cameras': 3,
                     'approx_sync': False,
-                    # 'wait_imu_to_init': True,    # ждать IMU перед стартом
+                    'wait_imu_to_init': True,    # ждать IMU перед стартом
+                    'Vis/FeatureType': "8",          # GFTT/Harris - лучше для однородных поверхностей
+                    'Vis/GridRows': "4",             # Делить кадр на 4 строки
+                    'Vis/GridCols': "4",             # и 4 столбца -> 16 ячеек, признаки в каждой
+                    'Vis/MaxFeatures': "600",        # Увеличить кол-во признаков
+                    'OdomF2M/MaxSize': "2000",       # Больший локальный map
+                    'Odom/Holonomic': "false",       # Твой робот не-голономный (гусеницы!)
                     # 'Imu/FilteringStrategy': '1',
                 }],
                 remappings=[
@@ -195,6 +199,7 @@ def generate_launch_description():
                     ("rgbd_image1", 'left_cams/rgbd_image'),
                     ("rgbd_image2", 'right_cams/rgbd_image'),
                     ('imu',         'imu/data_filtered'),   # фильтрованный IMU!
+                    ('odom', 'odom'),
                 ],
                 condition=UnlessCondition(localization)
             ),
@@ -217,7 +222,8 @@ def generate_launch_description():
                     ('right/image_rect', 'front_cams/front_right_camera/image'),
                     ('left/camera_info', 'front_cams/front_left_camera/camera_info'),
                     ('right/camera_info', 'front_cams/front_right_camera/camera_info'),
-                    ('odom', '/diff_drive_controller/odom'),
+                    ('odom', 'odom'),
+                    # ('odom', '/diff_drive_controller/odom'),
                 ]
             ),
         ]

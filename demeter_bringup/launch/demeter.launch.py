@@ -11,7 +11,7 @@ import os
 robot = 'demeter'
 
 def generate_launch_description():
-    
+    pkg_bringup = get_package_share_directory('demeter_bringup')
     ## Arguments
     sim_arg = DeclareLaunchArgument(name='sim', default_value='true', choices=['true', 'false'],
                                     description='Set to true to switch from hardware to simulation in the loop')
@@ -19,6 +19,8 @@ def generate_launch_description():
                                     description='Unique robot name')
     namespace_arg = DeclareLaunchArgument(name='use_namespace', default_value="false", choices=['true', 'false'],
                                     description='Use robot name to namespace robot')
+    world_arg = DeclareLaunchArgument(name='world', default_value=os.path.join(pkg_bringup, 'worlds', 'marsyard2020_walls.sdf'),
+                                    description='Gazebo world path')
     declare_headless = DeclareLaunchArgument(
         'headless',
         default_value='false',
@@ -39,6 +41,7 @@ def generate_launch_description():
             condition=IfCondition(LaunchConfiguration('sim')),
             launch_arguments={
                 'headless': LaunchConfiguration('headless'),
+                'world': LaunchConfiguration('world'),
             }.items()
         ),
 
@@ -49,6 +52,9 @@ def generate_launch_description():
             launch_arguments={
                 'robot_name': LaunchConfiguration('robot_name'),
                 'use_namespace': LaunchConfiguration('use_namespace'),
+                'x': LaunchConfiguration('x'),
+                'y': LaunchConfiguration('y'),
+                
             }.items()
         ),
 
@@ -72,6 +78,7 @@ def generate_launch_description():
         sim_arg,
         robot_name_arg,
         namespace_arg,
+        world_arg,
         declare_headless,
         x_arg,
         y_arg,

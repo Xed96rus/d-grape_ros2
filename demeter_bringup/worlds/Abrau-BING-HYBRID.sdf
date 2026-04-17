@@ -1,0 +1,144 @@
+<?xml version="1.0" ?>
+<sdf version="1.9">
+  <world name="Abrau-BING-HYBRID">
+    <gravity>0 0 -9.8066</gravity>
+
+    <plugin
+      filename="ignition-gazebo-physics-system"
+      name="ignition::gazebo::systems::Physics">
+    </plugin>
+    <plugin
+      filename="ignition-gazebo-sensors-system"
+      name="ignition::gazebo::systems::Sensors">
+      <render_engine>ogre2</render_engine>
+    </plugin>
+    <plugin
+      filename="ignition-gazebo-scene-broadcaster-system"
+      name="ignition::gazebo::systems::SceneBroadcaster">
+    </plugin>
+    <plugin
+      filename="ignition-gazebo-user-commands-system"
+      name="ignition::gazebo::systems::UserCommands">
+    </plugin>
+
+    <spherical_coordinates>
+      <surface_model>EARTH_WGS84</surface_model>
+      <world_frame_orientation>ENU</world_frame_orientation>
+      <latitude_deg>52.2184</latitude_deg>
+      <longitude_deg>6.8753</longitude_deg>
+      <elevation>0</elevation>
+      <heading_deg>0</heading_deg>
+    </spherical_coordinates>
+
+        
+    <physics name="1ms" type="ignored">
+      <real_time_factor>1.0</real_time_factor>
+      <dart>
+        <!-- Heightmaps behave better with the bullet collision detector -->
+        <collision_detector>bullet</collision_detector>
+      </dart>
+    </physics>
+
+    <light type="directional" name="sun">
+      <cast_shadows>true</cast_shadows>
+      <pose>0 0 10 0 0 0</pose>
+      <diffuse>0.8 0.8 0.8 1</diffuse>
+      <specular>0.2 0.2 0.2 1</specular>
+      <attenuation>
+        <range>1000</range>
+        <constant>0.9</constant>
+        <linear>0.01</linear>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+      <direction>-0.5 0.1 -0.9</direction>
+    </light>
+
+
+    <!-- Environment model -->
+    <include>
+      <uri>model://Abrau-BING-HYBRID</uri>
+    </include>
+
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/saiaravind19/models/helipad</uri>
+    </include>
+
+
+  <!-- Generated 50 grape models -->
+    <include>
+      <uri>model://grape_1</uri>
+      <name>grape_0</name>
+      <pose>8.000 2.300 0.423 0 0 -1.585740</pose>
+    </include>
+    <include>
+      <uri>model://grape_1</uri>
+      <name>grape_1</name>
+      <pose>7.970 0.300 0.423 0 0 -1.585740</pose>
+    </include>
+    <include>
+      <uri>model://grape_1</uri>
+      <name>grape_2</name>
+      <pose>7.940 -1.700 0.130 0 0 -1.585740</pose>
+    </include>
+    <include>
+      <uri>model://grape_1</uri>
+      <name>grape_3</name>
+      <pose>10.500 2.263 0.423 0 0 -1.585740</pose>
+    </include>
+    <include>
+      <uri>model://grape_1</uri>
+      <name>grape_4</name>
+      <pose>10.470 0.263 0.423 0 0 -1.585740</pose>
+    </include>
+    <include>
+      <uri>model://grape_1</uri>
+      <name>grape_5</name>
+      <pose>10.440 -1.737 0.130 0 0 -1.585740</pose>
+    </include>
+    <include>
+      <uri>model://grape_1</uri>
+      <name>grape_6</name>
+      <pose>12.999 2.225 0.717 0 0 -1.585740</pose>
+    </include>
+    <include>
+      <uri>model://grape_1</uri>
+      <name>grape_7</name>
+      <pose>12.970 0.226 0.717 0 0 -1.585740</pose>
+    </include>
+    <include>
+      <uri>model://grape_1</uri>
+      <name>grape_8</name>
+      <pose>12.940 -1.774 0.423 0 0 -1.585740</pose>
+    </include>
+    <include>
+      <uri>model://grape_1</uri>
+      <name>grape_9</name>
+      <pose>15.499 2.188 1.010 0 0 -1.585740</pose>
+    </include>
+    <include>
+      <uri>model://grape_1</uri>
+      <name>grape_10</name>
+      <pose>15.469 0.188 1.010 0 0 -1.585740</pose>
+    </include>
+    <include>
+      <uri>model://grape_1</uri>
+      <name>grape_11</name>
+      <pose>15.439 -1.812 1.010 0 0 -1.585740</pose>
+    </include>
+    <include>
+      <uri>model://grape_1</uri>
+      <name>grape_12</name>
+      <pose>17.999 2.151 1.010 0 0 -1.585740</pose>
+    </include>
+    <include>
+      <uri>model://grape_1</uri>
+      <name>grape_13</name>
+      <pose>17.969 0.151 1.010 0 0 -1.585740</pose>
+    </include>
+    <include>
+      <uri>model://grape_1</uri>
+      <name>grape_14</name>
+      <pose>17.939 -1.849 1.010 0 0 -1.585740</pose>
+    </include>
+</world>
+</sdf>
