@@ -1,0 +1,75 @@
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+    <ros2_control name="GazeboSimSystem" type="system">
+        <hardware>
+        <plugin>gz_ros2_control/GazeboSimSystem</plugin>
+        </hardware>
+        <joint name="base_to_right_star">
+        <command_interface name="velocity">
+            <param name="min">-10</param>
+            <param name="max">10</param>
+        </command_interface>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+        </joint>
+        <joint name="base_to_right_f_roller">
+        <command_interface name="velocity">
+            <param name="min">-10</param>
+            <param name="max">10</param>
+        </command_interface>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+        </joint>
+
+        <joint name="base_to_right_b_roller">
+        <command_interface name="velocity">
+            <param name="min">-10</param>
+            <param name="max">10</param>
+        </command_interface>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+        </joint>
+        <joint name="base_to_right_roller_star">
+        <command_interface name="velocity">
+            <param name="min">-10</param>
+            <param name="max">10</param>
+        </command_interface>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+        </joint>
+        <joint name="base_to_left_star">
+        <command_interface name="velocity">
+            <param name="min">-10</param>
+            <param name="max">10</param>
+        </command_interface>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+        </joint>
+        <joint name="base_to_left_f_roller">
+        <command_interface name="velocity">
+            <param name="min">-10</param>
+            <param name="max">10</param>
+        </command_interface>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+        </joint>
+
+        <joint name="base_to_left_b_roller">
+        <command_interface name="velocity">
+            <param name="min">-10</param>
+            <param name="max">10</param>
+        </command_interface>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+        </joint>
+        <joint name="base_to_left_roller_star">
+        <command_interface name="velocity">
+            <param name="min">-10</param>
+            <param name="max">10</param>
+        </command_interface>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+        </joint>
+
+    </ros2_control>
+</robot>

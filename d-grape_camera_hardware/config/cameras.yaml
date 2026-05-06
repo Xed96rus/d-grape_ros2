@@ -1,0 +1,42 @@
+# Конфигурация для трёх стереопар (C++ пакет d-grape_camera_hardware).
+#
+# Каждая нода принимает ОДИН wide-девайс (/dev/stereo_camN),
+# захватывает MJPG кадр frame_width × frame_height и делит пополам.
+#
+# Неймспейсы совпадают с launch/stereo_cameras.launch.py:
+#   front_cams — /dev/stereo_cam0  (хаб, порт 1.3)
+#   left_cams  — /dev/stereo_cam1  (прямой порт 2)
+#   right_cams — /dev/stereo_cam2  (прямой порт 3)
+
+/front_cams/stereo_camera_node_front_cams:
+  ros__parameters:
+    device_path:    /dev/stereo_cam0
+    camera_fps:     30.0
+    frame_width:    1280
+    frame_height:   480
+    frame_id_left:  f_left_camera
+    frame_id_right: f_right_camera
+    reconnect_sec:  2.0
+    baseline_m:     0.178
+
+/left_cams/stereo_camera_node_left_cams:
+  ros__parameters:
+    device_path:    /dev/stereo_cam1
+    camera_fps:     30.0
+    frame_width:    1280
+    frame_height:   480
+    frame_id_left:  l_left_camera
+    frame_id_right: l_right_camera
+    reconnect_sec:  2.0
+    baseline_m:     0.178
+
+/right_cams/stereo_camera_node_right_cams:
+  ros__parameters:
+    device_path:    /dev/stereo_cam2
+    camera_fps:     30.0
+    frame_width:    1280
+    frame_height:   480
+    frame_id_left:  r_left_camera
+    frame_id_right: r_right_camera
+    reconnect_sec:  2.0
+    baseline_m:     0.178

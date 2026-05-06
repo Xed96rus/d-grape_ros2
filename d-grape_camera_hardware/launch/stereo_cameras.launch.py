@@ -1,0 +1,83 @@
+"""
+Launch-файл: запускает три экземпляра stereo_camera_node (C++).
+
+Каждая нода открывает ОДИН USB-девайс (/dev/stereo_camN),
+захватывает MJPG кадр 1280×480, делит пополам и публикует:
+
+  namespace front_cams  (камера 0, /dev/stereo_cam0):
+    /front_cams/f_left_camera/image         /front_cams/f_left_camera/camera_info
+    /front_cams/f_right_camera/image        /front_cams/f_right_camera/camera_info
+
+  namespace left_cams   (камера 1, /dev/stereo_cam1):
+    /left_cams/l_left_camera/image          /left_cams/l_left_camera/camera_info
+    /left_cams/l_right_camera/image         /left_cams/l_right_camera/camera_info
+
+  namespace right_cams  (камера 2, /dev/stereo_cam2):
+    /right_cams/r_left_camera/image         /right_cams/r_left_camera/camera_info
+    /right_cams/r_right_camera/image        /right_cams/r_right_camera/camera_info
+
+Итого 12 топиков — 4 на камеру (image + camera_info для left и right).
+"""
+
+from launch import LaunchDescription
+from launch.actions import DeclareLaunchArgument
+from launch.substitutions import LaunchConfiguration
+from launch_ros.actions import Node
+from launch_ros.parameter_descriptions import ParameterValue
+
+# =============================================================================
+# Привязка физических портов к namespace-ам
+# Симлинки создаются udev-правилами из /etc/udev/rules.d/99-stereo-camera.rules
+# =============================================================================
+CAMERA_CONFIG = [
+    # (namespace,    device_path,           prefix)
+    ('front_cams', '/dev/stereo_cam0',     'f'),   # хаб, порт 1.3
+    ('left_cams',  '/dev/stereo_cam1',     'l'),   # прямой порт 2
+    ('right_cams', '/dev/stereo_cam2',     'r'),   # прямой порт 3
+]
+# =============================================================================
+
+
+def _make_stereo_node(namespace, device_path, prefix, fps, width, height) -> Node:
+    p = prefix
+    return Node(
+        package='d-grape_camera_hardware',
+        executable='stereo_camera_node',
+        name=f'stereo_camera_node_{namespace}',
+        namespace=namespace,
+        output='screen',
+        parameters=[{
+            'device_path':    device_path,
+            'camera_fps':     fps,
+            'frame_width':    width,
+            'frame_height':   height,
+            'frame_id_left':  f'{p}_left_camera',
+            'frame_id_right': f'{p}_right_camera',
+        }],
+        remappings=[
+            ('left/image_raw',    f'{p}_left_camera/image'),
+            ('left/camera_info',  f'{p}_left_camera/camera_info'),
+            ('right/image_raw',   f'{p}_right_camera/image'),
+            ('right/camera_info', f'{p}_right_camera/camera_info'),
+        ],
+    )
+
+
+def generate_launch_description():
+    fps_arg    = DeclareLaunchArgument(
+        'camera_fps',   default_value='30.0',  description='FPS для всех камер')
+    width_arg  = DeclareLaunchArgument(
+        'frame_width',  default_value='1280',  description='Ширина wide-кадра (side-by-side)')
+    height_arg = DeclareLaunchArgument(
+        'frame_height', default_value='480',   description='Высота кадра')
+
+    fps    = ParameterValue(LaunchConfiguration('camera_fps'),   value_type=float)
+    width  = ParameterValue(LaunchConfiguration('frame_width'),  value_type=int)
+    height = ParameterValue(LaunchConfiguration('frame_height'), value_type=int)
+
+    nodes = [
+        _make_stereo_node(ns, dev, prefix, fps, width, height)
+        for ns, dev, prefix in CAMERA_CONFIG
+    ]
+
+    return LaunchDescription([fps_arg, width_arg, height_arg, *nodes])

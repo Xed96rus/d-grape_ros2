@@ -1,0 +1,1119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-4-g7f85cfe  Build Version: 1.6.7995.38578
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot  xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:property name="mesh_dir" value="$(find d-grape_description)/models/meshes" />
+
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="-0.075544 4.6294E-10 0.18462"
+        rpy="0 0 0" />
+      <mass
+        value="5.0268" />
+      <inertia
+        ixx="0.041093"
+        ixy="1.0616E-07"
+        ixz="2.4482E-06"
+        iyy="0.074544"
+        iyz="-6.2185E-11"
+        izz="0.10285" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file://${mesh_dir}/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.18 0.18 0.18 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file://${mesh_dir}/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="front_cams">
+    <inertial>
+      <origin
+        xyz="0.0019647 9.1194E-05 -0.012504"
+        rpy="0 0 0" />
+      <mass
+        value="0.045237" />
+      <inertia
+        ixx="0.00015167"
+        ixy="-2.9715E-08"
+        ixz="1.0485E-08"
+        iyy="3.4302E-06"
+        iyz="2.1151E-08"
+        izz="0.00015353" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file://${mesh_dir}/front_cams.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.1 0.75294 0.8 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file://${mesh_dir}/front_cams.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="base_to_front_cams"
+    type="fixed">
+    <origin
+      xyz="0.192 0 0.322286199982912"
+      rpy="0 1.5707963267949 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="front_cams" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="f_left_camera">
+    <inertial>
+      <origin
+        xyz="0 -1.3878E-17 -0.005"
+        rpy="0 0 0" />
+      <mass
+        value="0.012007" />
+      <inertia
+        ixx="2.4715E-07"
+        ixy="-3.816E-40"
+        ixz="4.6171E-24"
+        iyy="2.4715E-07"
+        iyz="1.1692E-23"
+        izz="2.9418E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file://${mesh_dir}/f_left_camera.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 0.7" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file://${mesh_dir}/f_left_camera.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="base_to_f_left_camera"
+    type="fixed">
+    <origin
+      xyz="0 0.089 0.003"
+      rpy="0 0 0" />
+    <parent
+      link="front_cams" />
+    <child
+      link="f_left_camera" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="f_right_camera">
+    <inertial>
+      <origin
+        xyz="0 -1.3878E-17 -0.005"
+        rpy="0 0 0" />
+      <mass
+        value="0.012007" />
+      <inertia
+        ixx="2.4715E-07"
+        ixy="1.7858E-39"
+        ixz="2.1704E-23"
+        iyy="2.4715E-07"
+        iyz="1.1692E-23"
+        izz="2.9418E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file://${mesh_dir}/f_right_camera.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 0.7" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file://${mesh_dir}/f_right_camera.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="base_to_f_right_camera"
+    type="fixed">
+    <origin
+      xyz="0 -0.089 0.00300000000000003"
+      rpy="0 0 0" />
+    <parent
+      link="front_cams" />
+    <child
+      link="f_right_camera" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="left_cams">
+    <inertial>
+      <origin
+        xyz="0.0010352 9.9915E-05 -0.011347"
+        rpy="0 0 0" />
+      <mass
+        value="0.041289" />
+      <inertia
+        ixx="0.0001416"
+        ixy="-2.9715E-08"
+        ixz="2.0623E-08"
+        iyy="3.3857E-06"
+        iyz="2.1151E-08"
+        izz="0.00014352" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file://${mesh_dir}/left_cams.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.1 0.75294 0.8 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file://${mesh_dir}/left_cams.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="base_to_left_cams"
+    type="fixed">
+    <origin
+      xyz="-0.0777499999999999 0.2095 0.322286199982912"
+      rpy="1.5707963267949 1.5707963267949 3.14" />
+    <parent
+      link="base_link" />
+    <child
+      link="left_cams" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="l_left_camera">
+    <inertial>
+      <origin
+        xyz="0 0 -0.005"
+        rpy="0 0 0" />
+      <mass
+        value="0.012007" />
+      <inertia
+        ixx="2.4715E-07"
+        ixy="6.8217E-24"
+        ixz="-1.0303E-23"
+        iyy="2.4715E-07"
+        iyz="-3.2216E-24"
+        izz="2.9418E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file://${mesh_dir}/l_left_camera.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 0.7" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file://${mesh_dir}/l_left_camera.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="base_to_l_left_camera"
+    type="fixed">
+    <origin
+      xyz="0 0.089 0.00300000000000003"
+      rpy="0 0 0" />
+    <parent
+      link="left_cams" />
+    <child
+      link="l_left_camera" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+  <link
+    name="l_right_camera">
+    <inertial>
+      <origin
+        xyz="0 0 -0.005"
+        rpy="0 0 0" />
+      <mass
+        value="0.012007" />
+      <inertia
+        ixx="2.4715E-07"
+        ixy="6.8217E-24"
+        ixz="-1.0303E-23"
+        iyy="2.4715E-07"
+        iyz="-5.1795E-24"
+        izz="2.9418E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file://${mesh_dir}/l_right_camera.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 0.7" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file://${mesh_dir}/l_right_camera.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="base_to_l_right_camera"
+    type="fixed">
+    <origin
+      xyz="0 -0.0890000000000001 0.00300000000000003"
+      rpy="0 0 0" />
+    <parent
+      link="left_cams" />
+    <child
+      link="l_right_camera" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="right_cams">
+    <inertial>
+      <origin
+        xyz="0.0010352 9.9915E-05 -0.011347"
+        rpy="0 0 0" />
+      <mass
+        value="0.041289" />
+      <inertia
+        ixx="0.0001416"
+        ixy="-2.9715E-08"
+        ixz="2.0623E-08"
+        iyy="3.3857E-06"
+        iyz="2.1151E-08"
+        izz="0.00014352" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file://${mesh_dir}/right_cams.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.1 0.75294 0.8 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file://${mesh_dir}/right_cams.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="base_to_right_cams"
+    type="fixed">
+    <origin
+      xyz="-0.0777499999999999 -0.2095 0.322286199982912"
+      rpy="1.5707963267949 -1.5707963267949 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="right_cams" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="r_left_camera">
+    <inertial>
+      <origin
+        xyz="0 1.7347E-18 -0.005"
+        rpy="0 0 0" />
+      <mass
+        value="0.012007" />
+      <inertia
+        ixx="2.4715E-07"
+        ixy="-4.3013E-24"
+        ixz="1.26E-39"
+        iyy="2.4715E-07"
+        iyz="-5.3767E-25"
+        izz="2.9418E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file://${mesh_dir}/r_left_camera.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 0.7" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file://${mesh_dir}/r_left_camera.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="base_to_r_left_camera"
+    type="fixed">
+    <origin
+      xyz="0 0.089 0.003"
+      rpy="0 0 0" />
+    <parent
+      link="right_cams" />
+    <child
+      link="r_left_camera" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="r_right_camera">
+    <inertial>
+      <origin
+        xyz="0 0 -0.005"
+        rpy="0 0 0" />
+      <mass
+        value="0.012007" />
+      <inertia
+        ixx="2.4715E-07"
+        ixy="-4.3013E-24"
+        ixz="1.26E-39"
+        iyy="2.4715E-07"
+        iyz="-5.3767E-25"
+        izz="2.9418E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file://${mesh_dir}/r_right_camera.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 0.7" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file://${mesh_dir}/r_right_camera.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="base_to_r_right_camera"
+    type="fixed">
+    <origin
+      xyz="0 -0.089 0.003"
+      rpy="0 0 0" />
+    <parent
+      link="right_cams" />
+    <child
+      link="r_right_camera" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="right_track">
+    <inertial>
+      <origin
+        xyz="0.00094237 0.016551 -0.069043"
+        rpy="0 0 0" />
+      <mass
+        value="5.9783" />
+      <inertia
+        ixx="0.016351"
+        ixy="-1.2437E-06"
+        ixz="-1.5016E-05"
+        iyy="0.029644"
+        iyz="-7.5658E-10"
+        izz="0.013902" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file://${mesh_dir}/right_track.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.6 0.6 0.6 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file://${mesh_dir}/right_track.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="base_to_right_track"
+    type="fixed">
+    <origin
+      xyz="-0.0739997005257136 -0.249507806907019 0.213351418532562"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="right_track" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="right_star">
+    <inertial>
+      <origin
+        xyz="0 0 -0.0070062"
+        rpy="0 0 0" />
+      <mass
+        value="0.20295" />
+      <inertia
+        ixx="0.0001891"
+        ixy="-1.409E-20"
+        ixz="-3.7778E-20"
+        iyy="0.0001891"
+        iyz="3.0992E-21"
+        izz="0.00020449" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file://${mesh_dir}/right_star.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.1 0.75 0.8 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file://${mesh_dir}/right_star.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="base_to_right_star"
+    type="revolute">
+    <origin
+      xyz="0.241 0.018008 0.046435"
+      rpy="1.5708 0 0" />
+    <parent
+      link="right_track" />
+    <child
+      link="right_star" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="right_f_roller">
+    <inertial>
+      <origin
+        xyz="-1.3878E-17 -6.9389E-18 5.5511E-17"
+        rpy="0 0 0" />
+      <mass
+        value="0.16217" />
+      <inertia
+        ixx="0.00013098"
+        ixy="2.2645E-20"
+        ixz="7.2762E-21"
+        iyy="0.00013098"
+        iyz="1.326E-20"
+        izz="0.00018157" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file://${mesh_dir}/right_f_roller.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file://${mesh_dir}/right_f_roller.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="base_to_right_f_roller"
+    type="revolute">
+    <origin
+      xyz="0.18291 0.019308 -0.16335"
+      rpy="1.5708 0 0" />
+    <parent
+      link="right_track" />
+    <child
+      link="right_f_roller" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+    <mimic
+      joint="base_to_right_star"
+      multiplier="1"
+      offset="0" />
+  </joint>
+  <link
+    name="right_b_roller">
+    <inertial>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <mass
+        value="0.162168751410081" />
+      <inertia
+        ixx="0.000130984876872724"
+        ixy="3.10578747326577E-22"
+        ixz="-2.26769342200741E-21"
+        iyy="0.000130984876872724"
+        iyz="-2.32934060494928E-22"
+        izz="0.000181568887144003" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file://${mesh_dir}/right_b_roller.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file://${mesh_dir}/right_b_roller.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="base_to_right_b_roller"
+    type="revolute">
+    <origin
+      xyz="-0.18291 0.019308 -0.16335"
+      rpy="1.5708 0 0" />
+    <parent
+      link="right_track" />
+    <child
+      link="right_b_roller" />
+    <axis
+      xyz="0 0 -1" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+    <mimic
+      joint="base_to_right_star"
+      multiplier="1"
+      offset="0" />
+  </joint>
+  <link
+    name="right_roller_star">
+    <inertial>
+      <origin
+        xyz="-5.5511E-17 0 -0.0070062"
+        rpy="0 0 0" />
+      <mass
+        value="0.20295" />
+      <inertia
+        ixx="0.0001891"
+        ixy="-8.3168E-20"
+        ixz="-5.9121E-21"
+        iyy="0.0001891"
+        iyz="-1.1833E-22"
+        izz="0.00020449" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file://${mesh_dir}/right_roller_star.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.1 0.75 0.8 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file://${mesh_dir}/right_roller_star.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="base_to_right_roller_star"
+    type="revolute">
+    <origin
+      xyz="-0.249 0.018008 0.046435"
+      rpy="1.5708 0 0" />
+    <parent
+      link="right_track" />
+    <child
+      link="right_roller_star" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+    <mimic
+      joint="base_to_right_star"
+      multiplier="1"
+      offset="0" />
+  </joint>
+  <link
+    name="left_track">
+    <inertial>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <mass
+        value="0" />
+      <inertia
+        ixx="0"
+        ixy="0"
+        ixz="0"
+        iyy="0"
+        iyz="0"
+        izz="0" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file://${mesh_dir}/left_track.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file://${mesh_dir}/left_track.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="base_to_left_track"
+    type="fixed">
+    <origin
+      xyz="-0.0740002994742864 0.247507806907019 0.213351418532561"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="left_track" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="left_star">
+    <inertial>
+      <origin
+        xyz="2.7756E-17 0 -0.0070062"
+        rpy="0 0 0" />
+      <mass
+        value="0.20295" />
+      <inertia
+        ixx="0.0001891"
+        ixy="-2.0993E-20"
+        ixz="-4.9262E-21"
+        iyy="0.0001891"
+        iyz="3.5204E-21"
+        izz="0.00020449" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file://${mesh_dir}/left_star.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.1 0.75 0.8 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file://${mesh_dir}/left_star.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="base_to_left_star"
+    type="revolute">
+    <origin
+      xyz="0.241 -0.016008 0.046435"
+      rpy="-1.5708 0 0" />
+    <parent
+      link="left_track" />
+    <child
+      link="left_star" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="left_f_roller">
+    <inertial>
+      <origin
+        xyz="2.77555756156289E-17 -6.93889390390723E-18 -5.55111512312578E-17"
+        rpy="0 0 0" />
+      <mass
+        value="0.162168751410081" />
+      <inertia
+        ixx="0.000130984876872724"
+        ixy="1.41960047409174E-21"
+        ixz="-1.63127126972582E-21"
+        iyy="0.000130984876872724"
+        iyz="-8.47668781941742E-21"
+        izz="0.000181568887144003" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file://${mesh_dir}/left_f_roller.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file://${mesh_dir}/left_f_roller.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="base_to_left_f_roller"
+    type="revolute">
+    <origin
+      xyz="0.18291 -0.019308 -0.16335"
+      rpy="-1.5708 0 0" />
+    <parent
+      link="left_track" />
+    <child
+      link="left_f_roller" />
+    <axis
+      xyz="0 0 -1" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+    <mimic
+      joint="base_to_left_star"
+      multiplier="1"
+      offset="0" />
+  </joint>
+  <link
+    name="left_b_roller">
+    <inertial>
+      <origin
+        xyz="0 0 2.77555756156289E-17"
+        rpy="0 0 0" />
+      <mass
+        value="0.162168751410081" />
+      <inertia
+        ixx="0.000130984876872724"
+        ixy="-8.69620492514414E-21"
+        ixz="-7.85362640748906E-21"
+        iyy="0.000130984876872724"
+        iyz="-2.67479521170757E-21"
+        izz="0.000181568887144003" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file://${mesh_dir}/left_b_roller.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file://${mesh_dir}/left_b_roller.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="base_to_left_b_roller"
+    type="revolute">
+    <origin
+      xyz="-0.18291 -0.019308 -0.16335"
+      rpy="-1.5708 0 0" />
+    <parent
+      link="left_track" />
+    <child
+      link="left_b_roller" />
+    <axis
+      xyz="0 0 -1" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+    <mimic
+      joint="base_to_left_star"
+      multiplier="1"
+      offset="0" />
+  </joint>
+  <link
+    name="left_roller_star">
+    <inertial>
+      <origin
+        xyz="0 0 -0.0070062"
+        rpy="0 0 0" />
+      <mass
+        value="0.20295" />
+      <inertia
+        ixx="0.0001891"
+        ixy="-1.6928E-20"
+        ixz="-4.9262E-21"
+        iyy="0.0001891"
+        iyz="3.5204E-21"
+        izz="0.00020449" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file://${mesh_dir}/left_roller_star.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.1 0.75 0.8 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file://${mesh_dir}/left_roller_star.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="base_to_left_roller_star"
+    type="revolute">
+    <origin
+      xyz="-0.249 -0.016008 0.046435"
+      rpy="-1.5708 0 0" />
+    <parent
+      link="left_track" />
+    <child
+      link="left_roller_star" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+    <mimic
+      joint="base_to_left_star"
+      multiplier="1"
+      offset="0" />
+  </joint>
+</robot>
