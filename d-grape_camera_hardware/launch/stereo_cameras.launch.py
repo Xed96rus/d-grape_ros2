@@ -19,6 +19,7 @@ Launch-файл: запускает три экземпляра stereo_camera_no
 Итого 12 топиков — 4 на камеру (image + camera_info для left и right).
 """
 
+from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration
@@ -29,16 +30,17 @@ from launch_ros.parameter_descriptions import ParameterValue
 # Привязка физических портов к namespace-ам
 # Симлинки создаются udev-правилами из /etc/udev/rules.d/99-stereo-camera.rules
 # =============================================================================
+CONFIG_ROOT = get_package_share_directory('d-grape_camera_hardware') + '/config'
 CAMERA_CONFIG = [
-    # (namespace,    device_path,           prefix)
-    ('front_cams', '/dev/stereo_cam0',     'f'),   # хаб, порт 1.3
-    ('left_cams',  '/dev/stereo_cam1',     'l'),   # прямой порт 2
-    ('right_cams', '/dev/stereo_cam2',     'r'),   # прямой порт 3
+    # (namespace,    device_path,           prefix, left_yaml,      right_yaml)
+    ('front_cams', '/dev/stereo_cam0',     'f',     'front_cal/left.yaml',  'front_cal/right.yaml'),
+    ('left_cams',  '/dev/stereo_cam1',     'l',     'left_cal/left.yaml',   'left_cal/right.yaml'),
+    ('right_cams', '/dev/stereo_cam2',     'r',     'right_cal/left.yaml',  'right_cal/right.yaml'),
 ]
 # =============================================================================
 
 
-def _make_stereo_node(namespace, device_path, prefix, fps, width, height) -> Node:
+def _make_stereo_node(namespace, device_path, prefix, left_yaml, right_yaml, fps, width, height) -> Node:
     p = prefix
     return Node(
         package='d-grape_camera_hardware',
@@ -47,12 +49,14 @@ def _make_stereo_node(namespace, device_path, prefix, fps, width, height) -> Nod
         namespace=namespace,
         output='screen',
         parameters=[{
-            'device_path':    device_path,
-            'camera_fps':     fps,
-            'frame_width':    width,
-            'frame_height':   height,
-            'frame_id_left':  f'{p}_left_camera',
-            'frame_id_right': f'{p}_right_camera',
+            'device_path':         device_path,
+            'camera_fps':          fps,
+            'frame_width':         width,
+            'frame_height':        height,
+            'frame_id_left':       f'{p}_left_camera',
+            'frame_id_right':      f'{p}_right_camera',
+            'left_camera_info_url':  f'{CONFIG_ROOT}/{left_yaml}',
+            'right_camera_info_url': f'{CONFIG_ROOT}/{right_yaml}',
         }],
         remappings=[
             ('left/image_raw',    f'{p}_left_camera/image'),
@@ -76,8 +80,8 @@ def generate_launch_description():
     height = ParameterValue(LaunchConfiguration('frame_height'), value_type=int)
 
     nodes = [
-        _make_stereo_node(ns, dev, prefix, fps, width, height)
-        for ns, dev, prefix in CAMERA_CONFIG
+        _make_stereo_node(ns, dev, prefix, left_yaml, right_yaml, fps, width, height)
+        for ns, dev, prefix, left_yaml, right_yaml in CAMERA_CONFIG
     ]
 
     return LaunchDescription([fps_arg, width_arg, height_arg, *nodes])
