@@ -8,13 +8,6 @@ Launch-файл: запускает три экземпляра stereo_camera_no
     /front_cams/f_left_camera/image         /front_cams/f_left_camera/camera_info
     /front_cams/f_right_camera/image        /front_cams/f_right_camera/camera_info
 
-  namespace left_cams   (камера 1, /dev/left_cams):
-    /left_cams/l_left_camera/image          /left_cams/l_left_camera/camera_info
-    /left_cams/l_right_camera/image         /left_cams/l_right_camera/camera_info
-
-  namespace right_cams  (камера 2, /dev/right_cams):
-    /right_cams/r_left_camera/image         /right_cams/r_left_camera/camera_info
-    /right_cams/r_right_camera/image        /right_cams/r_right_camera/camera_info
 
 Итого 12 топиков — 4 на камеру (image + camera_info для left и right).
 """
@@ -33,9 +26,7 @@ from launch_ros.parameter_descriptions import ParameterValue
 CONFIG_ROOT = get_package_share_directory('d-grape_camera_hardware') + '/config'
 CAMERA_CONFIG = [
     # (namespace,    device_path,           prefix, left_yaml,      right_yaml)
-    ('front_cams', '/dev/stereo_cam0',     'f',     'front_cal/left.yaml',  'front_cal/right.yaml'),
-    ('left_cams',  '/dev/stereo_cam1',     'l',     'left_cal/left.yaml',   'left_cal/right.yaml'),
-    ('right_cams', '/dev/stereo_cam2',     'r',     'right_cal/left.yaml',  'right_cal/right.yaml'),
+    ('front_cams', '/dev/v4l/by-path/pci-0000:07:00.4-usb-0:1:1.0-video-index0',     'f',     'front_cal/left.yaml',  'front_cal/right.yaml'),
 ]
 # =============================================================================
 
@@ -83,5 +74,28 @@ def generate_launch_description():
         _make_stereo_node(ns, dev, prefix, left_yaml, right_yaml, fps, width, height)
         for ns, dev, prefix, left_yaml, right_yaml in CAMERA_CONFIG
     ]
+    nodes2 = [
+    Node(
+                package='rtabmap_sync',
+                executable='stereo_sync',
+                name='stereo_sync_front',
+                namespace='front_cams',
+                output='screen',
+                parameters=[{
+                    'approx_sync': True,
+                    'qos': 2,
+                    'qos_camera_info': 2,
+                    'queue_size': 10,
+                    'sync_queue_size': 10,
+                    'approx_sync_max_interval': 0.01  # с
+                }],
+                remappings=[
+                    ('left/camera_info', 'f_left_camera/camera_info'),
+                    ('left/image_rect', 'f_left_camera/image'),
+                    ('right/camera_info', 'f_right_camera/camera_info'),
+                    ('right/image_rect', 'f_right_camera/image'),
+                ]
+            ),
+    ]
 
-    return LaunchDescription([fps_arg, width_arg, height_arg, *nodes])
+    return LaunchDescription([fps_arg, width_arg, height_arg, *nodes, *nodes2])

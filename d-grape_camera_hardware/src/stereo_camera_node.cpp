@@ -7,7 +7,7 @@
 #include "sensor_msgs/msg/image.hpp"
 #include "sensor_msgs/msg/camera_info.hpp"
 #include "cv_bridge/cv_bridge.h"
-#include <opencv2/core.hpp>
+#include <yaml-cpp/yaml.h>
 
 #include "d-grape_camera_hardware/frame_grabber.hpp"
 
@@ -57,77 +57,51 @@ static bool loadCameraInfoFromYaml(
     const std::string & yaml_path,
     sensor_msgs::msg::CameraInfo & info)
 {
-    cv::FileStorage fs(yaml_path, cv::FileStorage::READ);
-    if (!fs.isOpened()) {
+    YAML::Node doc;
+    try {
+        doc = YAML::LoadFile(yaml_path);
+    } catch (const YAML::Exception & e) {
         return false;
     }
 
-    int width = 0;
-    int height = 0;
-    std::string distortion_model;
-    cv::Mat camera_matrix;
-    cv::Mat distortion_coefficients;
-    cv::Mat rectification_matrix;
-    cv::Mat projection_matrix;
+    if (!doc["image_width"] || !doc["image_height"]) return false;
 
-    fs["image_width"] >> width;
-    fs["image_height"] >> height;
-    fs["distortion_model"] >> distortion_model;
-    fs["camera_matrix"] >> camera_matrix;
-    fs["distortion_coefficients"] >> distortion_coefficients;
-    fs["rectification_matrix"] >> rectification_matrix;
-    fs["projection_matrix"] >> projection_matrix;
+    info.width  = doc["image_width"].as<int>();
+    info.height = doc["image_height"].as<int>();
 
-    if (width <= 0 || height <= 0 || camera_matrix.empty() ||
-        distortion_coefficients.empty() || rectification_matrix.empty() ||
-        projection_matrix.empty())
-    {
-        return false;
-    }
+    if (doc["distortion_model"])
+        info.distortion_model = doc["distortion_model"].as<std::string>();
+    else
+        info.distortion_model = "plumb_bob";
 
-    info.width = static_cast<unsigned>(width);
-    info.height = static_cast<unsigned>(height);
-    info.distortion_model = distortion_model.empty() ? "plumb_bob" : distortion_model;
+    // Вспомогательная лямбда для чтения матриц
+    auto readVec = [&](const std::string & key, size_t expected_size,
+                       auto & out_array) -> bool {
+        if (!doc[key] || !doc[key]["data"]) return false;
+        auto data = doc[key]["data"];
+        if (data.size() != expected_size) return false;
+        for (size_t i = 0; i < expected_size; ++i)
+            out_array[i] = data[i].as<double>();
+        return true;
+    };
 
-    if (camera_matrix.rows * camera_matrix.cols != 9) {
-        return false;
-    }
-    std::array<double, 9> k_vals;
-    for (int r = 0; r < camera_matrix.rows; ++r) {
-        for (int c = 0; c < camera_matrix.cols; ++c) {
-            k_vals[r * camera_matrix.cols + c] = cvMatGetDouble(camera_matrix, r, c);
-        }
-    }
+    std::array<double, 9>  k_vals{}, r_vals{};
+    std::array<double, 12> p_vals{};
+
+    if (!readVec("camera_matrix",        9,  k_vals)) return false;
+    if (!readVec("rectification_matrix", 9,  r_vals)) return false;
+    if (!readVec("projection_matrix",    12, p_vals)) return false;
+
     info.k = k_vals;
-
-    info.d.clear();
-    for (int r = 0; r < distortion_coefficients.rows; ++r) {
-        for (int c = 0; c < distortion_coefficients.cols; ++c) {
-            info.d.push_back(cvMatGetDouble(distortion_coefficients, r, c));
-        }
-    }
-
-    if (rectification_matrix.rows * rectification_matrix.cols != 9) {
-        return false;
-    }
-    std::array<double, 9> r_vals;
-    for (int r = 0; r < rectification_matrix.rows; ++r) {
-        for (int c = 0; c < rectification_matrix.cols; ++c) {
-            r_vals[r * rectification_matrix.cols + c] = cvMatGetDouble(rectification_matrix, r, c);
-        }
-    }
     info.r = r_vals;
-
-    if (projection_matrix.rows * projection_matrix.cols != 12) {
-        return false;
-    }
-    std::array<double, 12> p_vals;
-    for (int r = 0; r < projection_matrix.rows; ++r) {
-        for (int c = 0; c < projection_matrix.cols; ++c) {
-            p_vals[r * projection_matrix.cols + c] = cvMatGetDouble(projection_matrix, r, c);
-        }
-    }
     info.p = p_vals;
+
+    // distortion_coefficients
+    if (doc["distortion_coefficients"] && doc["distortion_coefficients"]["data"]) {
+        info.d.clear();
+        for (auto v : doc["distortion_coefficients"]["data"])
+            info.d.push_back(v.as<double>());
+    }
 
     return true;
 }

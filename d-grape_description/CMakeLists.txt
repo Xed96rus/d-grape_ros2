@@ -24,11 +24,9 @@ if(BUILD_TESTING)
 endif()
 
 install(
-  DIRECTORY
-    models/
-    launch/
-  DESTINATION share/${PROJECT_NAME}/launch
-  DESTINATION share/${PROJECT_NAME}/models
+  DIRECTORY models launch
+  DESTINATION share/${PROJECT_NAME}
+
   
 )
 

@@ -4,10 +4,6 @@ Launch-файл: запускает три экземпляра stereo_camera_no
 Каждая нода открывает ОДИН USB-девайс (/dev/NAME_cams),
 захватывает MJPG кадр 1280×480, делит пополам и публикует:
 
-  namespace front_cams  (камера 0, /dev/front_cams):
-    /front_cams/f_left_camera/image         /front_cams/f_left_camera/camera_info
-    /front_cams/f_right_camera/image        /front_cams/f_right_camera/camera_info
-
   namespace left_cams   (камера 1, /dev/left_cams):
     /left_cams/l_left_camera/image          /left_cams/l_left_camera/camera_info
     /left_cams/l_right_camera/image         /left_cams/l_right_camera/camera_info
@@ -33,7 +29,6 @@ from launch_ros.parameter_descriptions import ParameterValue
 CONFIG_ROOT = get_package_share_directory('d-grape_camera_hardware') + '/config'
 CAMERA_CONFIG = [
     # (namespace,    device_path,           prefix, left_yaml,      right_yaml)
-    ('front_cams', '/dev/stereo_cam0',     'f',     'front_cal/left.yaml',  'front_cal/right.yaml'),
     ('left_cams',  '/dev/stereo_cam1',     'l',     'left_cal/left.yaml',   'left_cal/right.yaml'),
     ('right_cams', '/dev/stereo_cam2',     'r',     'right_cal/left.yaml',  'right_cal/right.yaml'),
 ]
