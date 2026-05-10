@@ -4,7 +4,10 @@
 #include <chrono>
 #include <iostream>
 
-FrameGrabber::FrameGrabber(const std::string & device, int width, int height,
+// ---------------------------------------------------------------------------
+
+FrameGrabber::FrameGrabber(const std::string & device,
+                            int width, int height,
                             double fps, double reconnect_sec,
                             std::function<void(bool)> on_connect)
 : device_(device), width_(width), height_(height),
@@ -16,6 +19,8 @@ FrameGrabber::FrameGrabber(const std::string & device, int width, int height,
 
 FrameGrabber::~FrameGrabber() { stop(); }
 
+// ---------------------------------------------------------------------------
+
 void FrameGrabber::stop()
 {
     stop_ = true;
@@ -23,13 +28,18 @@ void FrameGrabber::stop()
     cap_.reset();
 }
 
+// ---------------------------------------------------------------------------
+
 bool FrameGrabber::read(cv::Mat & frame)
 {
     std::lock_guard<std::mutex> lk(mutex_);
-    if (!has_frame_) return false;
+    if (!has_frame_ || !new_frame_) return false;
     last_frame_.copyTo(frame);
+    new_frame_ = false;   // потреблён — следующий read вернёт false до нового кадра
     return true;
 }
+
+// ---------------------------------------------------------------------------
 
 void FrameGrabber::loop()
 {
@@ -37,7 +47,7 @@ void FrameGrabber::loop()
     int timeouts = 0;
 
     while (!stop_) {
-        // (Re)connect
+        // ── (пере)подключение ────────────────────────────────────────────
         if (!cap_ || !cap_->isOpened()) {
             try {
                 cap_ = std::make_unique<MJPGCapture>(device_, width_, height_, fps_);
@@ -54,11 +64,13 @@ void FrameGrabber::loop()
             }
         }
 
+        // ── захват кадра ─────────────────────────────────────────────────
         cv::Mat frame;
         if (cap_->read(frame)) {
             std::lock_guard<std::mutex> lk(mutex_);
             last_frame_ = std::move(frame);
             has_frame_  = true;
+            new_frame_  = true;   // сигнал: новый кадр готов
             timeouts    = 0;
         } else {
             if (++timeouts >= kMaxTimeouts) {
@@ -69,6 +81,7 @@ void FrameGrabber::loop()
                 {
                     std::lock_guard<std::mutex> lk(mutex_);
                     has_frame_ = false;
+                    new_frame_ = false;
                 }
                 if (on_connect_) on_connect_(false);
                 std::this_thread::sleep_for(
